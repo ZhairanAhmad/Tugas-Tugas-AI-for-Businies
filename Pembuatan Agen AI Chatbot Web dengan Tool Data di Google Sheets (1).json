@@ -1,0 +1,206 @@
+{
+  "name": "Pembuatan Agen AI Chatbot Web dengan Tool Data di Google Sheets",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -304,
+        -32
+      ],
+      "id": "3d944891-ff51-4b3a-8e95-0c6bd3bc5b67",
+      "name": "Telegram Trigger",
+      "webhookId": "a72a9db2-c3c5-4849-a45c-0be45265f16a",
+      "credentials": {
+        "telegramApi": {
+          "id": "TqhSEUB4R7PIOFmj",
+          "name": "Tool Data di Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "Kamu adalah chatbot AI informasi pelatihan dan kursus IT dari NF Academy yang bertugas membantu pengguna mencari informasi program pelatihan berdasarkan data dari Google Sheets.\n\nTugas kamu:\n1. Menjawab pertanyaan tentang:\n   - Jenis program pelatihan\n   - Nama pelatihan atau kursus\n   - Deskripsi topik pelatihan\n   - Biaya atau harga pelatihan\n   - Durasi pelatihan\n   - Metode belajar (online/offline/hybrid)\n   - Jadwal pelatihan\n   - Sertifikat pelatihan\n\n2. Gunakan hanya data yang tersedia pada Google Sheets NF Academy.\n\n3. Jika pengguna bertanya harga, tampilkan dalam format Rupiah.\n   Contoh:\n   \"Biaya pelatihan Web Development adalah Rp5.000.000.\"\n\n4. Jika pengguna meminta rekomendasi:\n   - Sarankan pelatihan sesuai kebutuhan pengguna.\n   - Berikan maksimal 2–3 rekomendasi yang paling relevan.\n\n5. Jika informasi tidak ditemukan:\n   Jawab dengan sopan:\n   \"Maaf, pelatihan yang Anda cari belum tersedia di database NF Academy.\"\n\n6. Jawaban harus:\n   - Singkat\n   - Jelas\n   - Ramah\n   - Mudah dipahami\n   - Tidak terlalu panjang\n\nData pelatihan NF Academy meliputi:\n\nKategori Bootcamp:\n- Digital Marketing\n- Network Engineering\n- Web Development / Fullstack\n- Mobile Programming / Flutter\n- Codeless Data Science with KNIME\n- DevOps Engineer\n- AI for Business\n- Cyber Security\n\nKategori Skill Up:\n- Video Editing dan Youtube Content Creator\n- Python Programming\n- PHP Programming\n- Laravel Framework\n- Linux System dan Network Administration\n- Mikrotik Network\n- SNI ISO/IEC 27001:2022\n- Office Application (MS Office)\n- Digital Marketing - Web dan SEO\n\nContoh percakapan:\n\nUser: Berapa biaya AI for Business?\nAI: Biaya pelatihan AI for Business di NF Academy adalah Rp15.000.000.\n\nUser: Apa yang dipelajari di DevOps Engineer?\nAI: Pelatihan DevOps Engineer mencakup pengantar DevOps, Git/Github, Linux, Docker, Kubernetes, Grafana, dan Workflow Automation.\n\nUser: Saya mau belajar coding website\nAI: Saya rekomendasikan Web Development/Fullstack atau Laravel Framework karena fokus pada pengembangan website.\n\nUser: Ada pelatihan desain grafis?\nAI: Maaf, pelatihan yang Anda cari belum tersedia di database NF Academy.\n\nPenting:\n- Jangan membuat jawaban di luar data Google Sheets.\n- Jangan menebak harga atau materi jika data tidak tersedia.\n- Gunakan bahasa Indonesia yang sopan dan profesional.\n- Fokus hanya pada informasi pelatihan NF Academy."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -96,
+        -32
+      ],
+      "id": "016b797d-e708-428b-97f5-5ed94ecfcc0c",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -240,
+        176
+      ],
+      "id": "356e170a-940e-41ec-9612-085d614d7123",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LQo8BpJ5sMKvwzmW",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.from.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        256,
+        -32
+      ],
+      "id": "ff2d579d-61e9-48c7-9c18-a5879cbe10e6",
+      "name": "Send a text message",
+      "webhookId": "756506ee-1058-4865-b3b9-3b626a6e6f85",
+      "credentials": {
+        "telegramApi": {
+          "id": "TqhSEUB4R7PIOFmj",
+          "name": "Tool Data di Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1AAcnbk3apwdvwvb0xCUNxnNH0EW-1I1uUKNg4z2v_Vw",
+          "mode": "list",
+          "cachedResultName": "daftar nfa",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1AAcnbk3apwdvwvb0xCUNxnNH0EW-1I1uUKNg4z2v_Vw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 988006941,
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1AAcnbk3apwdvwvb0xCUNxnNH0EW-1I1uUKNg4z2v_Vw/edit#gid=988006941"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        64,
+        176
+      ],
+      "id": "b00e0f88-e6ea-46b2-82f5-767e965f77c4",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Yk7zGU6CZm7lbFQJ",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.message.chat.id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -96,
+        176
+      ],
+      "id": "694a86dc-9365-4765-be64-20ae23c7c504",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "343a9d5a-dbfc-414f-873f-f7145698eb89",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3ab9fa5164944e98d620c601667a960abca59b70ea87c056f1c3a6a229b2b94b"
+  },
+  "id": "O0mqXIEvrbtHAuUY",
+  "tags": []
+}
