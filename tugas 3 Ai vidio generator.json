@@ -1,0 +1,328 @@
+{
+  "name": "tugas 3 Ai vidio generator",
+  "nodes": [
+    {
+      "parameters": {
+        "amount": 20
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        256,
+        -48
+      ],
+      "id": "37c7e52a-c8f7-44a9-86a3-2bb677ded1f3",
+      "name": "Menunggu Proses Generate Gambar",
+      "webhookId": "1a18d406-3d61-45b8-9713-8103b321d6bc"
+    },
+    {
+      "parameters": {
+        "url": "https://api.kie.ai/api/v1/jobs/recordInfo",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "taskId",
+              "value": "={{$json.data.taskId}}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$item(0).$node[\"Submit Text Prompt untuk Generate Vidio\"].json[\"api_key\"]}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        464,
+        -48
+      ],
+      "id": "05937626-d1cd-43c2-86b0-9f30a935a2c3",
+      "name": "Mendapatkan Status Generate"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7cf948ce-0b91-429d-a629-7719c31524f3",
+              "leftValue": "=success",
+              "rightValue": "={{ $json.data.state }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        672,
+        -48
+      ],
+      "id": "82a04f4d-baf6-453a-a2fd-62b1a4d1844a",
+      "name": "Check Jika Generate Sudah Selesai"
+    },
+    {
+      "parameters": {
+        "name": "vidio tugas 3",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "root",
+          "cachedResultName": "/ (Root folder)"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1296,
+        -64
+      ],
+      "id": "ed8958d1-7a05-463b-a412-36c537a86e66",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "abWduLc7pZwkmQE6",
+          "name": "drive yg 1"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.kie.ai/api/v1/jobs/createTask",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Conten-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$json.api_key}}                "
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"model\": \"grok-imagine/image-to-video\",\n  \"input\": {\n    \"image_urls\": [\n      \"https://drive.google.com/uc?export=download&id=1gG4r7Ohk5igGdlxn4TCoLLuqqEJ7F0M6\"\n    ],\n    \"prompt\": \"Make a moving video based on the image I sent. I want it to rotate.\",\n    \"mode\": \"normal\",\n    \"duration\": \"6\",\n    \"resolution\": \"480p\",\n    \"aspect_ratio\": \"16:9\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        48,
+        -48
+      ],
+      "id": "27d737d3-ecfd-4f4a-8630-54daa55ad645",
+      "name": "mengirim vidio generation request  ke KEI. API"
+    },
+    {
+      "parameters": {
+        "jsCode": "const result = JSON.parse($json.data.resultJson);\nreturn [{\nvideoUrl: result.resultUrls?. [0] || null\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        -64
+      ],
+      "id": "1d8d1c9c-ce86-4a75-b36a-36f36422d56c",
+      "name": "parse vidio URL"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.videoUrl }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1088,
+        -64
+      ],
+      "id": "43185bce-8ad9-41a6-9721-640e6ad8baff",
+      "name": "Download Vidio"
+    },
+    {
+      "parameters": {
+        "formTitle": "generate vidio kontren otomatis",
+        "formDescription": "isi informasi dibawah ini untuk memulai proses generate vidio\n",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "promt",
+              "fieldName": "promt",
+              "placeholder": "promt",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "img_url",
+              "fieldName": "img_url",
+              "placeholder": "img_url"
+            },
+            {
+              "fieldLabel": "task_type",
+              "fieldName": "task_type",
+              "placeholder": "task_type"
+            },
+            {
+              "fieldLabel": "api_key",
+              "fieldName": "api_key",
+              "placeholder": "api_key",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -160,
+        -48
+      ],
+      "id": "ba2ca3a2-e203-4791-b4d2-22230f77023e",
+      "name": "Submit Text Prompt untuk Generate Vidio",
+      "webhookId": "c34d3d11-9650-411f-8ec1-4d9a46df5e0c"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Menunggu Proses Generate Gambar": {
+      "main": [
+        [
+          {
+            "node": "Mendapatkan Status Generate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mendapatkan Status Generate": {
+      "main": [
+        [
+          {
+            "node": "Check Jika Generate Sudah Selesai",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Jika Generate Sudah Selesai": {
+      "main": [
+        [
+          {
+            "node": "parse vidio URL",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Menunggu Proses Generate Gambar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mengirim vidio generation request  ke KEI. API": {
+      "main": [
+        [
+          {
+            "node": "Menunggu Proses Generate Gambar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parse vidio URL": {
+      "main": [
+        [
+          {
+            "node": "Download Vidio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Vidio": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit Text Prompt untuk Generate Vidio": {
+      "main": [
+        [
+          {
+            "node": "mengirim vidio generation request  ke KEI. API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "5ee4ccdb-e0f9-434c-ba1a-28de2d4529a6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3ab9fa5164944e98d620c601667a960abca59b70ea87c056f1c3a6a229b2b94b"
+  },
+  "id": "oZRE4gJViy1jxhyQ",
+  "tags": []
+}
