@@ -1,0 +1,686 @@
+{
+  "name": "Final Project - Kel 4",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Formulir Pelanggaran Karyawan",
+        "formDescription": "Isi formulir ini untuk melaporkan pelanggaran karyawan. Data akan diproses secara otomatis oleh sistem HR.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "placeholder": "Contoh: Kelompok4@gmail.com"
+            },
+            {
+              "fieldLabel": "Nama",
+              "placeholder": "Mulyono",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Jabatan",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Admin Finance"
+                  },
+                  {
+                    "option": "IT Support"
+                  },
+                  {
+                    "option": "Marketing"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Deskripsi Pelanggaran",
+              "fieldType": "textarea",
+              "placeholder": "Isi pelanggaran yang ingin kamu ajukan",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -720,
+        112
+      ],
+      "id": "5affaf4f-5f32-41e6-91a2-6945341d1cfe",
+      "name": "On form submission",
+      "webhookId": "aa43464b-0bfb-4aba-bba9-eb175c7bd023"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1xo8FBVsIRSZHUAJEd9vQUAoFQC47o7LefqFV17wnwzQ",
+          "mode": "list",
+          "cachedResultName": "Data SP Karyawan1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xo8FBVsIRSZHUAJEd9vQUAoFQC47o7LefqFV17wnwzQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1986922035,
+          "mode": "list",
+          "cachedResultName": "Catatan SP_Karyawan"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Nama": "={{ $json.Nama }}",
+            "Jabatan": "={{ $json.Jabatan }}",
+            "Tanggal Terbit": "={{ $json.submittedAt }}",
+            "Deskripsi Pelanggaran": "={{ $json['Deskripsi Pelanggaran'] }}",
+            "Email": "={{ $json['Email Karyawan'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Nama",
+              "displayName": "Nama",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Jabatan",
+              "displayName": "Jabatan",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tanggal Terbit",
+              "displayName": "Tanggal Terbit",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Deskripsi Pelanggaran",
+              "displayName": "Deskripsi Pelanggaran",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -480,
+        112
+      ],
+      "id": "c5b21f3f-d08d-4609-8857-ac1994c2b196",
+      "name": "Append History",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jNKu4M0at1cv63HQ",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1xo8FBVsIRSZHUAJEd9vQUAoFQC47o7LefqFV17wnwzQ",
+          "mode": "list",
+          "cachedResultName": "Data SP Karyawan1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xo8FBVsIRSZHUAJEd9vQUAoFQC47o7LefqFV17wnwzQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Catatan_SP"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Nama",
+              "lookupValue": "={{ $json.Nama }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -720,
+        352
+      ],
+      "id": "22809ecd-6b84-45ed-b591-7cd65ad33146",
+      "name": "Membaca Data SP",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jNKu4M0at1cv63HQ",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let currentSP = $input.item.json['Level Sp'];\nlet nextSP = '';\n\nif (!currentSP || currentSP === '' || currentSP === '-') {\n    nextSP = 'SP1';\n} else if (currentSP === 'SP1') {\n    nextSP = 'SP2';\n} else if (currentSP === 'SP2') {\n    nextSP = 'SP3';\n} else {\n    nextSP = 'SP3 (Maksimal)';\n}\n\nreturn {\n    nama_karyawan: $input.item.json['Nama'],\n    level_sp_baru: nextSP,\n    row_number: $input.item.json['row_number']\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -496,
+        352
+      ],
+      "id": "4dcf68c3-8979-490d-81a7-295217c11109",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        192
+      ],
+      "id": "9e62e69f-a46b-49bc-9e83-83f04d5e4eb9",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "kV2fjgB8nLdKe3Yz",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "==### ROLE\nKamu adalah Senior HR Manager & Ahli Hukum Ketenagakerjaan Indonesia. \nTugas kamu adalah menulis Surat Peringatan (SP) resmi yang terstruktur rapi \nseperti surat dinas korporat, bukan narasi mengalir.\n\n### INPUT DATA\n- Nama Karyawan     : {{ $json.nama_karyawan }}\n- Email Karyawan    : {{ $('On form submission').item.json['Email Karyawan'] }}\n- Jabatan           : {{ $('Membaca Data SP').item.json.Jabatan }}\n- Jenis Pelanggaran : {{ $('On form submission').item.json['Deskripsi Pelanggaran'] }}\n- Tingkat SP        : {{ $json.level_sp_baru }}\n- Riwayat SP        : {{ $('Membaca Data SP').item.json['Level Sp'] }}\n- Tanggal Surat     : {{ $now.toFormat('dd MMMM yyyy') }}\n- Kota              : Jakarta\n- Nama HR Manager   : Joy Kho Why\n- Jabatan HR        : Senior HR Manager\n\n### INSTRUKSI FORMAT SURAT\nIkuti PERSIS struktur berikut, jangan tambah atau kurangi bagian:\n\n---\n[HEADER]\nNomor   : SP-[LevelSP]/HR/MBG/[BulanRomawi]/[Tahun]\nPerihal : Surat Peringatan [Level SP]\nKepada  : [Nama Karyawan]\nJabatan : [Jabatan]\n\n[PEMBUKAAN - 1 paragraf]\nSalam hormat. Dengan ini manajemen PT MBG menyampaikan Surat Peringatan \n[Level SP] kepada karyawan tersebut di atas, sehubungan dengan pelanggaran \nyang dilakukan terhadap ketentuan perusahaan.\n\n[DASAR HUKUM - 1 paragraf]\nCantumkan: Pasal 161 UU No.13/2003 & PP No.35/2021.\nJika SP2: sebut SP1 sebelumnya.\nJika SP3: sebut SP1 & SP2, tambahkan ancaman PHK sesuai Pasal 161 ayat (1).\n\n[URAIAN PELANGGARAN - 1 paragraf]\nJelaskan pelanggaran secara spesifik, tegas, dan faktual. \nSebutkan dampaknya terhadap perusahaan.\n\n[TUNTUTAN PERBAIKAN - 1 paragraf]\nTulis tuntutan konkret yang harus dipenuhi karyawan.\nTegaskan konsekuensi jika pelanggaran terulang.\n\n[PENUTUP - 1 paragraf]\nKalimat penutup formal. Harapan perbaikan. Kalimat pembinaan.\n\n[TANDA TANGAN]\nJakarta, {{ $now.toFormat('dd MMMM yyyy') }}\n\nHormat kami,\nPT MBG - Departemen Sumber Daya Manusia\n\n\n\n\n( _________________________ )\n[Nama HR Manager]\n[Jabatan HR]\n---\n\n### ATURAN KETAT\n1. WAJIB gunakan nomor surat di baris pertama.\n2. JANGAN tulis poin-poin/bullet. Semua paragraf.\n3. JANGAN ulangi kalimat yang sama di paragraf berbeda.\n4. JANGAN tulis kalimat pembuka seperti \"Berikut surat peringatan...\".\n5. Bahasa Indonesia baku, formal, tegas, tidak bertele-tele.\n6. Output HANYA isi surat, mulai dari Nomor hingga tanda tangan karyawan.\n7. Dokumen harus menggunakan format justify dan berikan space untuk menaruh gambar ttd\n",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        -336,
+        352
+      ],
+      "id": "0b87abf0-444c-4c71-8e48-501bcbbe755e",
+      "name": "Membuat Template Surat Peringatan SP"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1xo8FBVsIRSZHUAJEd9vQUAoFQC47o7LefqFV17wnwzQ",
+          "mode": "list",
+          "cachedResultName": "Data SP Karyawan1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xo8FBVsIRSZHUAJEd9vQUAoFQC47o7LefqFV17wnwzQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Data_Sp"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Level Sp": "={{ $('Code in JavaScript').item.json.level_sp_baru }}",
+            "Nama": "={{ $('On form submission').item.json.Nama }}"
+          },
+          "matchingColumns": [
+            "Nama"
+          ],
+          "schema": [
+            {
+              "id": "Nama",
+              "displayName": "Nama",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Level Sp",
+              "displayName": "Level Sp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -96,
+        112
+      ],
+      "id": "4a314679-9809-4721-9749-874ce191b8b9",
+      "name": "Update Data SP",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jNKu4M0at1cv63HQ",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "folderId": "1eKB408QVkwB1P8QHQiR6je_V8Y788CGo",
+        "title": "=Surat Peringatan - {{ $json.Nama }}"
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        160,
+        112
+      ],
+      "id": "1f02d921-dc51-43d8-8e4b-d1bcc828c537",
+      "name": "Membuat File Docs",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "rXQm9bRlWicGkwoi",
+          "name": "Google Docs account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ $('Membuat File Docs').item.json.id }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "insert",
+              "locationChoice": "location",
+              "text": "={{ $('Membuat Template Surat Peringatan SP').item.json.text }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        48,
+        336
+      ],
+      "id": "7abe777e-49bd-4ba4-a38d-f39130957ee1",
+      "name": "Mengisi File Docs Yang Kosong",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "DSvmoENHF4pfwFsw",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Ambil semua data yang dibutuhkan WF2 dari node-node sebelumnya\nconst nama = $('Membaca Data SP').item.json['Nama'];\nconst email_karyawan = $('On form submission').first().json.Email;\nconst level_sp = $('Code in JavaScript').item.json.level_sp_baru;\nconst jabatan = $('Membaca Data SP').item.json['Jabatan'];\nconst pelanggaran = $('On form submission').item.json['Deskripsi Pelanggaran'];\nconst file_id = $input.first().json.documentId; // ID file PDF yang baru di-upload ke Drive\n\n// ⚠️ GANTI dengan URL n8n kamu!\nconst BASE_URL = 'https://YOUR-N8N-URL.app.n8n.cloud/webhook';\n\nconst konfirmasiUrl = `${BASE_URL}/sp-konfirmasi?nama=${encodeURIComponent(nama)}&email=${encodeURIComponent(email_karyawan)}&level=${encodeURIComponent(level_sp)}&jabatan=${encodeURIComponent(jabatan)}&file_id=${encodeURIComponent(file_id)}`;\n\nreturn {\n  nama_karyawan: nama,\n  email_karyawan: email_karyawan,\n  level_sp: level_sp,\n  jabatan: jabatan,\n  pelanggaran: pelanggaran,\n  file_id: file_id,\n  konfirmasi: konfirmasiUrl\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        272,
+        336
+      ],
+      "id": "91186d08-334e-41de-b697-30baa974df75",
+      "name": "Siapkan URL Approve & Reject"
+    },
+    {
+      "parameters": {
+        "sendTo": "ilha23077si@student.nurulfikri.ac.id",
+        "subject": "=[ACTION REQUIRED] Review {{ $json.level_sp }} - {{ $json.nama_karyawan }}",
+        "message": "==<!DOCTYPE html>\n<html>\n<body style=\"font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;\">\n\n  <!-- HEADER -->\n  <div style=\"background:#1a1a2e;padding:24px;border-radius:8px 8px 0 0;\">\n    <h2 style=\"color:#fff;margin:0;\">📋 Konfirmasi Surat Peringatan Karyawan</h2>\n    <p style=\"color:#aaa;margin:6px 0 0;\">PT MBG - Departemen Sumber Daya Manusia</p>\n  </div>\n\n  <!-- BODY -->\n  <div style=\"border:1px solid #ddd;border-top:none;padding:24px;border-radius:0 0 8px 8px;background:#fff;\">\n    \n    <p style=\"margin-top:0;\">Yth. HR Manager,</p>\n    <p>\n      Sistem telah membuat <strong>{{ $json.level_sp }}</strong> untuk karyawan berikut. \n      Mohon review dokumen dan klik tombol <strong>Konfirmasi</strong> apabila surat sudah sesuai.\n    </p>\n\n    <!-- TABEL DATA KARYAWAN -->\n    <table style=\"width:100%;border-collapse:collapse;margin:20px 0;font-size:14px;\">\n      <tr style=\"background:#f5f5f5;\">\n        <td style=\"padding:12px;font-weight:bold;width:40%;border:1px solid #eee;\">Nama Karyawan</td>\n        <td style=\"padding:12px;border:1px solid #eee;\">{{ $json.nama_karyawan }}</td>\n      </tr>\n      <tr>\n        <td style=\"padding:12px;font-weight:bold;border:1px solid #eee;\">Jabatan</td>\n        <td style=\"padding:12px;border:1px solid #eee;\">{{ $json.jabatan }}</td>\n      </tr>\n      <tr style=\"background:#f5f5f5;\">\n        <td style=\"padding:12px;font-weight:bold;border:1px solid #eee;\">Level SP</td>\n        <td style=\"padding:12px;border:1px solid #eee;\">\n          <strong style=\"color:#e74c3c;\">{{ $json.level_sp }}</strong>\n        </td>\n      </tr>\n      <tr>\n        <td style=\"padding:12px;font-weight:bold;border:1px solid #eee;\">Deskripsi Pelanggaran</td>\n        <td style=\"padding:12px;border:1px solid #eee;\">{{ $json.pelanggaran }}</td>\n      </tr>\n    </table>\n\n    <!-- TOMBOL KONFIRMASI -->\n    <div style=\"text-align:center;margin:32px 0;\">\n      <a \n        href=\"https://n8n-7xtcninax5er.jkt1.sumopod.my.id/webhook-test/sp-konfirmasi?status=konfirmasi&nama={{$json.nama_karyawan}}&email={{$json.email_karyawan}}&level_sp={{$json.level_sp}}&jabatan={{$json.jabatan}}&file_id={{ $('Mengisi File Docs Yang Kosong').item.json.documentId }}\" \n        style=\"\n          background:#1a1a2e;\n          color:#fff;\n          padding:16px 48px;\n          border-radius:8px;\n          text-decoration:none;\n          font-size:16px;\n          font-weight:bold;\n          letter-spacing:1px;\n        \"\n      >\n        ✅ KONFIRMASI SP\n      </a>\n    </div>\n\n    <p style=\"color:#555;font-size:13px;\">\n      Dengan mengklik tombol di atas, Anda menyetujui bahwa isi Surat Peringatan \n      telah sesuai dan sistem akan otomatis mengirimkannya ke email karyawan bersangkutan.\n    </p>\n\n    <!-- FOOTER -->\n    <hr style=\"border:none;border-top:1px solid #eee;margin:24px 0;\">\n    <p style=\"color:#aaa;font-size:11px;text-align:center;margin:0;\">\n      Email ini dikirim otomatis oleh Sistem HR PT MBG. Jangan balas email ini.\n    </p>\n\n  </div>\n\n</body>\n</html>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        384,
+        160
+      ],
+      "id": "16baeff5-92a1-4729-9cfa-5cc56265cff4",
+      "name": "Kirim Email Review ke HR",
+      "webhookId": "97cbdbec-4440-411c-957b-1a0312947718",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "jGnRU6AUHEkvvfls",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "sp-konfirmasi",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -720,
+        704
+      ],
+      "id": "75d02859-e84c-4314-8fca-ef48e0436af6",
+      "name": "Webhook APPROVE",
+      "webhookId": "sp-approve-webhook"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>SP Dikonfirmasi</title>\n\n<style>\n*{\n    margin:0;\n    padding:0;\n    box-sizing:border-box;\n    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n}\n\nbody{\n    min-height:100vh;\n    display:flex;\n    justify-content:center;\n    align-items:center;\n    background:linear-gradient(135deg,#e8f5e9,#f5f7fa);\n}\n\n.container{\n    background:#fff;\n    padding:45px 35px;\n    border-radius:20px;\n    max-width:500px;\n    width:90%;\n    text-align:center;\n    box-shadow:0 15px 40px rgba(0,0,0,0.08);\n    animation:fadeIn .5s ease;\n}\n\n.icon{\n    width:90px;\n    height:90px;\n    margin:0 auto 20px;\n    border-radius:50%;\n    background:#eafaf1;\n    display:flex;\n    align-items:center;\n    justify-content:center;\n    font-size:45px;\n}\n\nh1{\n    color:#27ae60;\n    margin-bottom:15px;\n    font-size:30px;\n}\n\np{\n    color:#666;\n    line-height:1.7;\n    margin-bottom:30px;\n}\n\n.btn{\n    display:inline-block;\n    padding:12px 28px;\n    background:#27ae60;\n    color:white;\n    text-decoration:none;\n    border-radius:10px;\n    font-weight:600;\n    transition:.3s;\n}\n\n.btn:hover{\n    background:#219150;\n    transform:translateY(-2px);\n}\n\n@keyframes fadeIn{\n    from{\n        opacity:0;\n        transform:translateY(20px);\n    }\n    to{\n        opacity:1;\n        transform:translateY(0);\n    }\n}\n</style>\n</head>\n<body>\n\n<div class=\"container\">\n    <div class=\"icon\">✅</div>\n\n    <h1>SP Berhasil Dikonfirmasi</h1>\n\n    <p>\n        Surat Peringatan telah berhasil dikonfirmasi oleh atasan dan\n        akan segera dikirimkan kepada karyawan yang bersangkutan.\n    </p>\n\n    <a href=\"https://mail.google.com/mail/u/0/?hl=en#inbox\" class=\"btn\">\n        Kembali ke Dashboard\n    </a>\n</div>\n\n</body>\n</html>",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -496,
+        704
+      ],
+      "id": "fc96dee9-ba16-4abe-849c-382349a1f713",
+      "name": "Response Approve ke Browser HR"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.query.file_id }}",
+          "mode": "id"
+        },
+        "options": {
+          "googleFileConversion": {
+            "conversion": {
+              "docsToFormat": "application/pdf"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -288,
+        704
+      ],
+      "id": "b4dc85fd-a2ff-4b0b-9a0c-2887e47562d0",
+      "name": "Download PDF dari Drive",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "v1J9qP409CQM6pXy",
+          "name": "Google Drive account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.query.email }}",
+        "subject": "=Surat Peringatan {{ $json.query.level_sp }} - PT MBG",
+        "message": "=<!DOCTYPE html><html><body style=\"font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;\">\n<div style=\"background:#1a1a2e;padding:20px;border-radius:8px 8px 0 0;\">\n  <h2 style=\"color:#fff;margin:0;\">📋 Surat Peringatan Resmi</h2>\n</div>\n<div style=\"border:1px solid #ddd;border-top:none;padding:24px;border-radius:0 0 8px 8px;\">\n  <p>Yth. <strong>{{ $('Webhook APPROVE').item.json.query.nama }}</strong>,</p>\n  <p>Bersama email ini, kami sampaikan bahwa Anda menerima <strong>{{ $('Webhook APPROVE').item.json.query.level_sp }}</strong> dari PT MBG - Departemen SDM.</p>\n  <p>Dokumen Surat Peringatan terlampir dalam email ini. Harap membaca dengan seksama dan menandatangani surat sesuai prosedur yang berlaku.</p>\n  <p>Apabila ada pertanyaan, silakan menghubungi HR Manager secara langsung.</p>\n  <br>\n  <p>Hormat kami,<br><strong>Departemen Sumber Daya Manusia</strong><br>PT MBG</p>\n</div></body></html>",
+        "options": {
+          "appendAttribution": false,
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -80,
+        704
+      ],
+      "id": "c983db19-7d08-44c2-93a4-f4af2a35e06f",
+      "name": "Kirim PDF SP ke Karyawan",
+      "webhookId": "531ecafb-64f0-4d50-9f3c-d545fc045fa1",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "jGnRU6AUHEkvvfls",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Note Pembuatan dan Konfirmasi SP",
+        "height": 544,
+        "width": 1536,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -896,
+        16
+      ],
+      "typeVersion": 1,
+      "id": "276e2a6f-d07d-4b81-a071-8a09d827a9b6",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Mengirim Surat Peringatan ke Karyawan",
+        "height": 304,
+        "width": 1088
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -896,
+        608
+      ],
+      "typeVersion": 1,
+      "id": "04cfb3c7-bfbd-4def-a6a6-74fd353b05ca",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Append History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append History": {
+      "main": [
+        [
+          {
+            "node": "Membaca Data SP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Membaca Data SP": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Membuat Template Surat Peringatan SP",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Membuat Template Surat Peringatan SP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Membuat Template Surat Peringatan SP": {
+      "main": [
+        [
+          {
+            "node": "Update Data SP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Data SP": {
+      "main": [
+        [
+          {
+            "node": "Membuat File Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Membuat File Docs": {
+      "main": [
+        [
+          {
+            "node": "Mengisi File Docs Yang Kosong",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mengisi File Docs Yang Kosong": {
+      "main": [
+        [
+          {
+            "node": "Siapkan URL Approve & Reject",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Siapkan URL Approve & Reject": {
+      "main": [
+        [
+          {
+            "node": "Kirim Email Review ke HR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook APPROVE": {
+      "main": [
+        [
+          {
+            "node": "Response Approve ke Browser HR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download PDF dari Drive": {
+      "main": [
+        [
+          {
+            "node": "Kirim PDF SP ke Karyawan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Kirim PDF SP ke Karyawan": {
+      "main": [
+        []
+      ]
+    },
+    "Response Approve ke Browser HR": {
+      "main": [
+        [
+          {
+            "node": "Download PDF dari Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "39083c36-00e6-46d6-ab88-0be77005f417",
+  "meta": {
+    "instanceId": "3e474f3cedecc42e8278a13ad0069fee45ed2385d445421ad1fb761191a74522"
+  },
+  "id": "AdEEPI8718gEPKvv",
+  "tags": []
+}
